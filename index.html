@@ -1419,7 +1419,9 @@ function updateSys(){if(current!=="demo"){setSys("cy","Ready");return}
   if(S.running)setSys("ok","System online");else setSys("warn","Camera offline")}
 
 function loadScript(src){return new Promise((res,rej)=>{if([...document.scripts].some(s=>s.src===src))return res();const s=document.createElement("script");s.src=src;s.async=false;s.onload=res;s.onerror=()=>rej(new Error("load "+src));document.head.appendChild(s)})}
-async function ensureModel(){if(S.model)return S.model;setModelState("loading");
+let MODEL_P=null;
+function ensureModel(){if(S.model)return Promise.resolve(S.model);if(!MODEL_P)MODEL_P=loadModel().catch(e=>{MODEL_P=null;throw e});return MODEL_P}
+async function loadModel(){setModelState("loading");
   try{for(const u of LIBS)await loadScript(u);
     try{await tf.setBackend("webgl")}catch(_){}await tf.ready();
     try{tf.enableProdMode()}catch(_){}
@@ -1447,7 +1449,7 @@ async function start(){
     let framed=false;try{framed=window.self!==window.top}catch(_){framed=true}
     return fail((n==="NotAllowedError"||n==="SecurityError")&&framed?"framed":n==="NotAllowedError"||n==="SecurityError"?"denied":(n==="NotFoundError"||n==="OverconstrainedError"||n==="NotReadableError")?"nocam":"other")}
   setCam("live");
-  if(!S.model){busy("Loading detection model","First load downloads about 5 MB and warms up the model. It is faster next time.");try{await ensureModel()}catch(e){return fail("model")}}
+  if(!S.model){busy("Preparing detection model","Almost ready. This happens once; next time it opens instantly.");try{await ensureModel()}catch(e){return fail("model")}}
   overlay(null);S.running=true;$("bStop").disabled=false;
   try{if("wakeLock" in navigator)S.wake=await navigator.wakeLock.request("screen")}catch(_){}
   S.lastDet=performance.now();detectLoop();drawLoop();updateSys()}
@@ -1503,6 +1505,16 @@ $("bStart").onclick=start;$("bRetry").onclick=start;$("bStop").onclick=stop;$("b
 document.addEventListener("visibilitychange",async()=>{if(!document.hidden&&S.running&&!S.wake&&"wakeLock" in navigator){try{S.wake=await navigator.wakeLock.request("screen")}catch(_){}}});
 setModelState("none");setCam("off");overlay("intro");
 window.DEMO={stop,updateSys,S,panel,draw,fit,overlay,setCam,setModelState};
+
+/* silent background preload: when the visitor nears the demo, or a few seconds after the site opens */
+(function(){
+  const c=navigator.connection;if(c&&(c.saveData||/(^|-)2g$/.test(c.effectiveType||"")))return;
+  let go=false;const kick=()=>{if(go||S.model)return;go=true;ensureModel().catch(()=>{go=false;setModelState("none")})};
+  const demo=document.getElementById("demo");
+  if(demo&&"IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();kick()}},{rootMargin:"900px 0px"});io.observe(demo)}
+  const idle=window.requestIdleCallback||(f=>setTimeout(f,1));
+  addEventListener("load",()=>setTimeout(()=>idle(kick,{timeout:3000}),4000),{once:true});
+})();
 })();
 
 
