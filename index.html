@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta name="google-site-verification" content="vNxw7gq47skxNy9MuAv16bcoHOBVcG-lqnfyoXe0hng" />
+<meta name="google-site-verification" content="vNxw7gq47skxNy9MuAv16bcoHOBVcG-lqnfyoXe0hng" />
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#070B12">
@@ -775,8 +775,38 @@ html.loading,html.loading body{overflow:hidden}
 .hero2-bg{filter:none}
 .facil-bg{filter:none}
 .sec,.numbers,.facil,.contact2{contain:layout paint}
-img{content-visibility:auto}
+
 .pl-bar i{transition:none}
+
+/* ---------- quotes carousel ---------- */
+.quotes{background:linear-gradient(180deg,#0B111B,#0D1624 50%,#0B111B)}
+.qs{position:relative;overflow:hidden;border:1px solid var(--border);background:#fff;max-width:980px;margin:0 auto;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.qs-track{display:flex;transition:transform .8s cubic-bezier(.2,.7,.2,1);will-change:transform}
+.qs-slide{flex:0 0 100%;margin:0;aspect-ratio:2000/1414}
+.qs-slide .zoomable{width:100%;height:100%;background:#fff}
+.qs-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.qs-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:1px solid rgba(48,66,89,.5);background:rgba(11,17,27,.72);color:#fff;font-size:24px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qs-nav.prev{left:var(--s3)}.qs-nav.next{right:var(--s3)}
+.qs-nav:hover{background:var(--blue)}
+.qs-foot{max-width:980px;margin:var(--s4) auto 0;display:flex;align-items:center;justify-content:space-between;gap:var(--s4);flex-wrap:wrap}
+.qs-who{font-family:var(--f-ui);font-weight:600;font-size:15px;letter-spacing:.04em;color:var(--silver);min-height:1.4em}
+.qs-dots{display:flex;gap:var(--s2)}
+.qs-dot{width:34px;height:4px;border:0;padding:0;background:rgba(170,184,197,.3);cursor:pointer;position:relative;overflow:hidden}
+.qs-dot[aria-selected="true"]{background:rgba(0,188,235,.25)}
+.qs-dot[aria-selected="true"]::after{content:"";position:absolute;inset:0;background:var(--cyan);transform-origin:left;animation:qsfill var(--qs-dur,7s) linear forwards}
+.qs.paused~.qs-foot .qs-dot[aria-selected="true"]::after{animation-play-state:paused}
+@keyframes qsfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (max-width:600px){.qs-nav{width:36px;height:36px;font-size:20px}.qs-foot{flex-direction:column;align-items:flex-start}}
+@media (prefers-reduced-motion:reduce){.qs-track{transition:none}.qs-dot[aria-selected="true"]::after{animation:none;transform:none}}
+
+/* ---------- partners strip: higher + more transparent ---------- */
+@media (min-width:901px){
+  .hero2-in{padding-block:var(--s7) calc(var(--s7) + var(--s5))}
+  .partners{background:rgba(9,14,22,.42)!important;border-color:rgba(170,184,197,.14)}
+  .rtag2{bottom:var(--s3)}
+}
+.quotes .sechead{margin-left:auto;margin-right:auto;text-align:center;max-width:980px}
+.quotes .sechead::before{margin-left:auto;margin-right:auto;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
 
 </style>
 </head>
@@ -870,6 +900,26 @@ img{content-visibility:auto}
         <article class="card"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg><h3>Research-driven design</h3><p>Engineering decisions rest on technical studies, academic literature and continuous evaluation.</p></article>
         <article class="card"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M12 7.5v4M12 11.5L6.5 16M12 11.5l5.5 4.5"/></svg><h3>Multidisciplinary engineering</h3><p>Mechanical, hardware, software and AI teams build one integrated indoor nanodrone platform together.</p></article>
         <article class="card"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg><h3>Open-source innovation</h3><p>Open-source tools speed up prototyping, so the team can focus on system integration, algorithms and autonomy.</p></article>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ===================== INSPIRATION ===================== -->
+  <section class="sec quotes" id="inspiration" aria-roledescription="carousel" aria-label="Words that inspire us">
+    <div class="gut"><div class="in">
+      <div class="sechead"><div class="kicker">Our inspiration</div><h2>Words that drive us</h2></div>
+      <div class="qs" id="qs">
+        <div class="qs-track" id="qsTrack">
+          <figure class="qs-slide" aria-roledescription="slide" aria-label="1 of 3"><button class="zoomable" data-img="img/quotes/q1-zayed.jpg" aria-label="View full size"><img decoding="async" src="img/quotes/q1-zayed.jpg" alt="Quote by the Late Sheikh Zayed bin Sultan Al Nahyan: Men make factories; it's not factories that make men." loading="lazy"></button></figure>
+          <figure class="qs-slide" aria-roledescription="slide" aria-label="2 of 3"><button class="zoomable" data-img="img/quotes/q2-mbz.jpg" aria-label="View full size"><img decoding="async" src="img/quotes/q2-mbz.jpg" alt="Quote by His Highness Sheikh Mohamed bin Zayed Al Nahyan, President of the United Arab Emirates: There is no place in the future for those who lack knowledge and education." loading="lazy"></button></figure>
+          <figure class="qs-slide" aria-roledescription="slide" aria-label="3 of 3"><button class="zoomable" data-img="img/quotes/q3-mbr.jpg" aria-label="View full size"><img decoding="async" src="img/quotes/q3-mbr.jpg" alt="Quote by His Highness Sheikh Mohammed bin Rashid Al Maktoum: There is no alternative for us but first place, and the word impossible is not in our dictionary in the UAE." loading="lazy"></button></figure>
+        </div>
+        <button class="qs-nav prev" id="qsPrev" aria-label="Previous quote">‹</button>
+        <button class="qs-nav next" id="qsNext" aria-label="Next quote">›</button>
+      </div>
+      <div class="qs-foot">
+        <div class="qs-who" id="qsWho" aria-live="polite"></div>
+        <div class="qs-dots" id="qsDots" role="tablist" aria-label="Choose quote"></div>
       </div>
     </div></div>
   </section>
@@ -1320,6 +1370,37 @@ window.FILM={mount(){const box=document.getElementById("filmBox");if(box.dataset
   else if(s){const v=document.createElement("video");v.src=s;v.controls=true;v.playsInline=true;v.preload="metadata";v.poster=document.getElementById("heroBg").src;box.appendChild(v)}
   else{box.innerHTML='<div class="soon2"><img decoding="async" class="soon2-bg" src="img/film-teaser-v.jpg" alt=""><img decoding="async" class="soon2-p" src="img/film-teaser-v.jpg" alt="KR8.063 Nanodrone, the official film, coming soon"></div>'}}};
 
+/* ======================= QUOTES CAROUSEL ======================= */
+(function(){
+const box=document.getElementById("qs");if(!box)return;
+const track=document.getElementById("qsTrack"),slides=[...track.children],dots=document.getElementById("qsDots"),who=document.getElementById("qsWho");
+const NAMES=["The Late Sheikh Zayed bin Sultan Al Nahyan","His Highness Sheikh Mohamed bin Zayed Al Nahyan","His Highness Sheikh Mohammed bin Rashid Al Maktoum"];
+const DUR=7000;let i=0,timer=null,visible=false,hover=false;
+document.documentElement.style.setProperty("--qs-dur",DUR+"ms");
+slides.forEach((_,k)=>{const d=document.createElement("button");d.className="qs-dot";d.setAttribute("role","tab");d.setAttribute("aria-label","Quote "+(k+1));d.onclick=()=>{go(k);restart()};dots.appendChild(d)});
+function go(k){i=(k+slides.length)%slides.length;track.style.transform="translateX("+(-100*i)+"%)";
+  [...dots.children].forEach((d,n)=>{d.setAttribute("aria-selected",n===i);if(n===i){d.style.animation="none";void d.offsetWidth;d.style.animation=""}});
+  who.textContent=NAMES[i]}
+function restart(){clearTimeout(timer);if(visible&&!hover&&!document.hidden)timer=setTimeout(()=>{go(i+1);restart()},DUR);box.classList.toggle("paused",!(visible&&!hover))}
+document.getElementById("qsPrev").onclick=()=>{go(i-1);restart()};document.getElementById("qsNext").onclick=()=>{go(i+1);restart()};
+box.addEventListener("mouseenter",()=>{hover=true;restart()});box.addEventListener("mouseleave",()=>{hover=false;restart()});
+let sx=null;box.addEventListener("touchstart",e=>{sx=e.touches[0].clientX},{passive:true});
+box.addEventListener("touchend",e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40){go(i+(dx<0?1:-1));restart()}sx=null});
+new IntersectionObserver(es=>{visible=es[0].isIntersecting;restart()},{threshold:.35}).observe(box);
+document.addEventListener("visibilitychange",restart);
+go(0);
+})();
+
+/* ======================= BACKGROUND IMAGE DECODE (smooth scrolling) ======================= */
+(function(){
+const idle=window.requestIdleCallback||(f=>setTimeout(()=>f({timeRemaining:()=>8}),200));
+function run(){const imgs=[...document.querySelectorAll('img[loading="lazy"]')];let k=0;
+  (function step(dl){while(k<imgs.length&&dl.timeRemaining()>4){const im=imgs[k++];im.loading="eager";if(im.decode)im.decode().catch(()=>{})}if(k<imgs.length)idle(step,{timeout:2000})})({timeRemaining:()=>0});
+  idle(function s(dl){},{timeout:10})}
+addEventListener("load",()=>setTimeout(()=>{const imgs=[...document.querySelectorAll('img[loading="lazy"]')];let k=0;
+  (function step(dl){let n=0;while(k<imgs.length&&(dl.timeRemaining()>4||n<1)){const im=imgs[k++];im.loading="eager";if(im.decode)im.decode().catch(()=>{});n++}if(k<imgs.length)idle(step,{timeout:1500})})({timeRemaining:()=>0})},1200),{once:true});
+})();
+
 /* ======================= PHOTO LIGHTBOX ======================= */
 document.addEventListener("click",e=>{const z=e.target.closest(".zoomable[data-img]");if(!z)return;
   const lb=document.getElementById("lb"),im=document.getElementById("lbImg");im.src=z.dataset.img;im.alt=(z.querySelector("img")||{}).alt||"";
@@ -1507,14 +1588,22 @@ document.addEventListener("visibilitychange",async()=>{if(!document.hidden&&S.ru
 setModelState("none");setCam("off");overlay("intro");
 window.DEMO={stop,updateSys,S,panel,draw,fit,overlay,setCam,setModelState};
 
+
+/* network-only prefetch: warms the browser cache, no parsing or GPU work while the visitor scrolls */
+function prefetch(){
+  const MJ="https://storage.googleapis.com/tfjs-models/savedmodel/ssdlite_mobilenet_v2/model.json";
+  const get=u=>fetch(u,{mode:"cors",credentials:"omit",priority:"low"}).catch(()=>null);
+  LIBS.forEach(get);
+  get(MJ).then(r=>r&&r.ok?r.json():null).then(j=>{if(!j||!j.weightsManifest)return;const base=MJ.slice(0,MJ.lastIndexOf("/")+1);
+    j.weightsManifest.forEach(g=>(g.paths||[]).forEach(p=>get(base+p)))}).catch(()=>{});
+}
 /* silent background preload: when the visitor nears the demo, or a few seconds after the site opens */
 (function(){
   const c=navigator.connection;if(c&&(c.saveData||/(^|-)2g$/.test(c.effectiveType||"")))return;
-  let go=false;const kick=()=>{if(go||S.model)return;go=true;ensureModel().catch(()=>{go=false;setModelState("none")})};
+  let go=false;const kick=()=>{if(go||S.model)return;go=true;prefetch()};
   const demo=document.getElementById("demo");
   if(demo&&"IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();kick()}},{rootMargin:"900px 0px"});io.observe(demo)}
   const idle=window.requestIdleCallback||(f=>setTimeout(f,1));
-  addEventListener("load",()=>setTimeout(()=>idle(kick,{timeout:3000}),4000),{once:true});
 })();
 })();
 
