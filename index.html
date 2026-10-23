@@ -656,6 +656,97 @@ html{scroll-padding-top:calc(80px + env(safe-area-inset-top,0px))}
 .zoomable:hover img,.icard:hover .icard-img img,.poster:hover img{filter:brightness(.94) saturate(.95) contrast(1.02)}
 .lightbox img,.shot-img img{filter:none}
 
+/* camera mode */
+.feedbox video.mono{filter:grayscale(1) contrast(1.12)}
+.seg{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr 1fr;align-items:stretch;border:1px solid var(--border);background:var(--panel)}
+.seg-l{display:flex;align-items:center;padding:0 var(--s4);font-family:var(--f-ui);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--label);border-right:1px solid var(--border)}
+.seg-b{font-family:var(--f-ui);font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--silver);background:transparent;border:0;min-height:44px;cursor:pointer}
+.seg-b+.seg-b{border-left:1px solid var(--border)}
+.seg-b[aria-pressed="true"]{background:rgba(0,188,235,.12);color:var(--cyan);box-shadow:inset 0 -2px 0 var(--cyan)}
+/* equal-height columns in drone + demo */
+@media (min-width:980px){
+  #model .grid,#demo .grid{align-items:stretch}
+  #model .ana,#demo .ana{height:100%}
+  #demo .ana .rows{margin-top:auto}
+  #demo .col>.note{margin-top:auto}
+}
+#demo .controls{grid-template-columns:1fr 1fr}
+@media (min-width:980px){#demo .ana .pos,#model .ana .pos{flex:1}}
+#model .controls{grid-template-columns:1fr}
+/* rhythm + small fixes from full-page review */
+.sec{padding-block:80px}
+@media (max-width:760px){.sec{padding-block:56px}}
+.sec .in>:last-child{margin-bottom:0}
+.hero2-main{max-width:720px}
+.hero2-mission{max-width:none}
+.person b{font-size:16px}
+.techline{margin-top:var(--s3)}
+/* phone fixes */
+@media (max-width:900px){.icard-h h3{white-space:normal;font-size:19px}}
+@media (max-width:600px){
+  .statusbar{grid-template-columns:1fr}
+  .st{border-left:0!important;border-top:1px solid var(--border);padding:var(--s3) var(--s4);display:flex;align-items:center;gap:var(--s3)}
+  .st:first-child{border-top:0}
+  .st>div{display:flex;justify-content:space-between;align-items:center;gap:var(--s3);flex:1}
+  .st b{margin:0;font-size:15px;text-align:right}
+  .nums{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .stat{grid-column:span 2}
+  .stat:nth-child(4){grid-column:2/span 2}
+  .stat:nth-child(5){grid-column:4/span 2}
+  .pgrid{display:grid;columns:auto;grid-template-columns:1fr 1fr;gap:var(--s2)}
+  .pgrid .poster{margin:0}
+  .contact2-logos{gap:var(--s4)}
+  .c-row{gap:var(--s5)}
+  .c-row img{height:36px}
+}
+@media (min-width:601px) and (max-width:900px){.nums{grid-template-columns:repeat(6,minmax(0,1fr))}.stat{grid-column:span 2}.stat:nth-child(4){grid-column:2/span 2}.stat:nth-child(5){grid-column:4/span 2}}
+.pgrid{display:grid;columns:auto;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s3);align-items:start}
+@media (max-width:900px){.pgrid{grid-template-columns:1fr 1fr}}
+.pgrid .poster{margin:0}
+@media (max-width:600px){.st .lbl{font-size:12px}.st b{font-size:14px;white-space:nowrap}}
+@media (min-width:901px) and (max-width:1100px){.split{grid-template-columns:1fr}}
+/* one fixed card size across the whole team section */
+#team .people{grid-auto-rows:auto;grid-template-columns:repeat(3,minmax(0,1fr))}
+#team .person{height:112px;min-height:0;overflow:hidden}
+@media (max-width:900px){#team .people{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){#team .people{grid-template-columns:1fr}#team .person{height:88px}}
+/* hero v3: drone fully visible, partners as a slim glass strip at the bottom */
+@media (min-width:901px){
+  .hero2{align-items:stretch;padding-block:0}
+  .hero2 .gut{display:flex}
+  .hero2-in{grid-template-columns:1fr;grid-template-rows:1fr auto;width:100%;min-height:min(92vh,860px);padding-block:var(--s7) var(--s6);gap:var(--s5)}
+  .hero2-main{align-self:center}
+  .partners{align-self:end;justify-self:end;flex-direction:row;align-items:center;gap:var(--s5);padding:var(--s3) var(--s5);
+    background:rgba(11,17,27,.38);border:1px solid rgba(170,184,197,.16);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:none}
+  .partners .lbl{font-size:11px;white-space:nowrap}
+  .glass-rule{width:1px;height:40px;margin:0}
+  .p-hct{width:200px}.p-k{width:130px}
+  .hero2-shade{background:
+    linear-gradient(90deg,rgba(5,8,13,.95) 0%,rgba(5,8,13,.82) 30%,rgba(5,8,13,.2) 62%,rgba(5,8,13,.1) 100%),
+    linear-gradient(0deg,rgba(5,8,13,.9) 0%,transparent 30%)}
+  .hero2-bg{filter:saturate(.9) brightness(.98);object-position:72% 45%}
+  .scrollcue,.rtag2{z-index:3}
+}
+.scrollcue{display:none!important}
+/* hero text: always readable, consistent rhythm, flush-left alignment */
+.hero2 h1 span{display:block}
+.hero2 h1{margin-bottom:var(--s2)}
+.hero2-main{gap:var(--s3)}
+.hero2-sub{margin-top:var(--s1)}
+.hero2-mission{border-left:0;padding-left:0;margin-top:var(--s1);display:flex;align-items:center;gap:var(--s3)}
+.hero2-mission::before{content:"";width:28px;height:2px;background:var(--cyan);flex:none;box-shadow:0 0 8px var(--glow)}
+.hero2-main h1,.hero2-sub,.hero2-mission{text-shadow:0 2px 14px rgba(5,8,13,.85)}
+@media (min-width:901px){
+  .hero2-main{max-width:640px}
+  .hero2-shade{background:
+    linear-gradient(90deg,rgba(5,8,13,.96) 0%,rgba(5,8,13,.9) 34%,rgba(5,8,13,.55) 50%,rgba(5,8,13,.12) 68%,rgba(5,8,13,.08) 100%),
+    linear-gradient(0deg,rgba(5,8,13,.9) 0%,transparent 30%)}
+}
+@media (min-width:1600px){.hero2-bg{object-position:80% 45%}}
+.hero2-mission{display:block}
+.hero2-mission::before{display:inline-block;vertical-align:middle;margin-right:var(--s3);position:relative;top:-2px}
+@media (min-width:901px){.hero2-main{max-width:780px}.hero2-mission{white-space:nowrap}}
+
 </style>
 </head>
 <body>
@@ -856,6 +947,7 @@ html{scroll-padding-top:calc(80px + env(safe-area-inset-top,0px))}
         </div>
         <div class="controls">
           <button class="btn pri" id="bShot2" disabled>Take mission photo</button>
+          <div class="seg" role="group" aria-label="Camera mode"><span class="seg-l">Camera mode</span><button class="seg-b" id="mColor" aria-pressed="true">Colour</button><button class="seg-b" id="mMono" aria-pressed="false">Mono</button></div>
           <button class="btn" id="bFlip" disabled>Switch camera</button>
           <button class="btn" id="bStop" disabled>Stop camera</button>
         </div>
@@ -1377,15 +1469,16 @@ async function compose(){
   const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#0B1626");g.addColorStop(.5,"#070B12");g.addColorStop(1,"#0B1626");x.fillStyle=g;x.fillRect(0,0,W,H);
   x.strokeStyle="rgba(35,145,235,.07)";x.lineWidth=1;for(let i=0;i<W;i+=40){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke()}for(let j=0;j<H;j+=40){x.beginPath();x.moveTo(0,j);x.lineTo(W,j);x.stroke()}
   // header
-  if(ss){const w=640,h=w*ss.height/ss.width;x.drawImage(ss,(W-w)/2,64,w,h)}
-  x.fillStyle="#00BCEB";x.font="500 24px 'Roboto Mono',monospace";spaced(x,"LIVE DEMO · DETECTION CONCEPT",W/2,222,5);
+  if(ss){const h=124,w=h*ss.width/ss.height;x.drawImage(ss,(W-w)/2,48,w,h)}
+  x.fillStyle="#00BCEB";x.font="500 24px 'Roboto Mono',monospace";spaced(x,"LIVE DEMO · DETECTION CONCEPT",W/2,226,5);
   // photo area
   const R={x:60,y:258,w:960,h:1240};
   x.fillStyle="#000";x.fillRect(R.x,R.y,R.w,R.h);
   const vw=video.videoWidth||4,vh=video.videoHeight||3,kk=Math.max(R.w/vw,R.h/vh),ox=(vw*kk-R.w)/2,oy=(vh*kk-R.h)/2;
   x.save();x.beginPath();x.rect(R.x,R.y,R.w,R.h);x.clip();
+  if(window.CAM_MONO){try{x.filter="grayscale(1) contrast(1.12)"}catch(_){}}
   if(S.mirror){x.translate(R.x+R.w,0);x.scale(-1,1);x.drawImage(video,-ox,R.y-oy,vw*kk,vh*kk)}else x.drawImage(video,R.x-ox,R.y-oy,vw*kk,vh*kk);
-  x.restore();
+  x.restore();try{x.filter="none"}catch(_){}
   // soft vignette
   const vg=x.createRadialGradient(W/2,R.y+R.h/2,R.h*.35,W/2,R.y+R.h/2,R.h*.8);vg.addColorStop(0,"rgba(0,0,0,0)");vg.addColorStop(1,"rgba(0,0,0,.45)");x.fillStyle=vg;x.fillRect(R.x,R.y,R.w,R.h);
   // detection boxes
@@ -1430,6 +1523,8 @@ async function shoot(){if(busy)return;busy=true;bShot.hidden=true;
     $("shotTip").textContent=bShare.hidden?"Save the photo, then post it to your story and tag Silent Spear Team. On iPhone you can also press and hold the photo to save it.":"Tap Share to story, then pick Instagram or Snapchat. Tag Silent Spear Team.";
     modal.hidden=false;bShare.hidden?bSave.focus():bShare.focus()}
   catch(e){console.error(e)}finally{busy=false;cd.hidden=true}}
+(function(){const bc=$("mColor"),bm=$("mMono");function set(m){window.CAM_MONO=m;video.classList.toggle("mono",m);bc.setAttribute("aria-pressed",!m);bm.setAttribute("aria-pressed",m);try{localStorage.setItem("kr8mono",m?"1":"0")}catch(_){}}
+  bc.onclick=()=>set(false);bm.onclick=()=>set(true);let s=false;try{s=localStorage.getItem("kr8mono")==="1"}catch(_){}set(s)})();
 bShot.addEventListener("click",shoot);bShot2.addEventListener("click",shoot);
 bShare.addEventListener("click",async()=>{if(!lastBlob)return;const file=new File([lastBlob],"KR8063-mission-photo.jpg",{type:"image/jpeg"});
   try{await navigator.share({files:[file],title:"KR8.063 Nanodrone",text:"Spotted by the KR8.063 Nanodrone detection demo · Silent Spear Team #KR8063Nanodrone #SilentSpearTeam https://"+SITE})}catch(_){}});
