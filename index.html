@@ -778,6 +778,10 @@ html.loading,html.loading body{overflow:hidden}
 
 .pl-bar i{transition:none}
 
+/* ---------- softer artwork for posters and inspirational quotes ---------- */
+.poster img,.quotes .qs-slide img{filter:brightness(.89) saturate(.76) contrast(.98);transition:filter .3s,transform .5s}
+.poster:hover img,.quotes .qs-slide .zoomable:hover img{filter:brightness(.94) saturate(.82) contrast(.99)}
+
 /* ---------- quotes carousel ---------- */
 .quotes{background:linear-gradient(180deg,#0B111B,#0D1624 50%,#0B111B)}
 .qs{position:relative;overflow:hidden;border:1px solid var(--border);background:#fff;max-width:980px;margin:0 auto;box-shadow:0 24px 60px rgba(0,0,0,.4)}
