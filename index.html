@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#070B12">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="canonical" href="https://silentspearteam-oss.github.io/kr8-063-nanodrone/">
@@ -17,6 +18,7 @@
 <meta property="og:url" content="https://silentspearteam-oss.github.io/kr8-063-nanodrone/">
 <meta property="og:image" content="https://silentspearteam-oss.github.io/kr8-063-nanodrone/img/drone.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://silentspearteam-oss.github.io/kr8-063-nanodrone/img/drone.jpg">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Silent Spear Team","url":"https://silentspearteam-oss.github.io/kr8-063-nanodrone/","email":"silentspear.team@gmail.com","logo":"https://silentspearteam-oss.github.io/kr8-063-nanodrone/icon-512.png","description":"Engineering students at the Higher Colleges of Technology developing the KR8.063 Nanodrone, an intelligent indoor reconnaissance platform."}</script>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
 <title>Silent Spear Team · KR8.063 Nanodrone</title>
@@ -591,7 +593,8 @@ html{scroll-padding-top:calc(80px + env(safe-area-inset-top,0px))}
 .masonry figcaption{padding:var(--s2) var(--s3);font-size:13.5px;color:var(--silver);line-height:1.4;border-top:2px solid var(--blue2)}
 
 .track{align-content:start}
-.track-img img{object-position:50% 50%}
+.track-img img{object-fit:cover}
+.track:nth-child(2) .track-img img{object-position:50% 85%}
 
 /* ---------- division icons ---------- */
 .divic{width:44px;height:44px;object-fit:contain;flex:none}
@@ -777,10 +780,6 @@ html.loading,html.loading body{overflow:hidden}
 .sec,.numbers,.facil,.contact2{contain:layout paint}
 
 .pl-bar i{transition:none}
-
-/* ---------- softer artwork for posters and inspirational quotes ---------- */
-.poster img,.quotes .qs-slide img{filter:brightness(.89) saturate(.76) contrast(.98);transition:filter .3s,transform .5s}
-.poster:hover img,.quotes .qs-slide .zoomable:hover img{filter:brightness(.94) saturate(.82) contrast(.99)}
 
 /* ---------- quotes carousel ---------- */
 .quotes{background:linear-gradient(180deg,#0B111B,#0D1624 50%,#0B111B)}
@@ -1408,300 +1407,4 @@ addEventListener("load",()=>setTimeout(()=>{const imgs=[...document.querySelecto
 /* ======================= PHOTO LIGHTBOX ======================= */
 document.addEventListener("click",e=>{const z=e.target.closest(".zoomable[data-img]");if(!z)return;
   const lb=document.getElementById("lb"),im=document.getElementById("lbImg");im.src=z.dataset.img;im.alt=(z.querySelector("img")||{}).alt||"";
-  document.getElementById("lbC").textContent=(z.closest("figure")?.querySelector("figcaption b")?.textContent)||"";
-  lb.dataset.single="1";lb.hidden=false;document.getElementById("lbX").focus()});
-
-/* ======================= POSTERS ======================= */
-(function(){
-const grid=document.getElementById("pgrid"),lb=document.getElementById("lb"),img=document.getElementById("lbImg");let at=0;
-const urls=Array.from({length:4},(_,i)=>"img/posters/poster-"+String(i+1).padStart(2,"0")+".jpg");
-urls.forEach((u,i)=>{const b=document.createElement("button");b.className="poster";b.setAttribute("aria-label","Poster "+(i+1));
-  const im=document.createElement("img");im.loading="lazy";im.alt="Poster "+(i+1);im.src=u.replace(".jpg","-s.jpg");
-  im.onerror=()=>{b.classList.add("err");b.textContent="Poster "+(i+1)};
-  const n=document.createElement("span");n.className="pn";n.textContent=String(i+1).padStart(2,"0");b.append(im,n);b.onclick=()=>open(i);grid.appendChild(b)});
-function open(i){lb.dataset.single="";at=(i+urls.length)%urls.length;img.src=urls[at];document.getElementById("lbC").textContent=String(at+1).padStart(2,"0")+" / "+String(urls.length).padStart(2,"0");lb.hidden=false;document.getElementById("lbX").focus()}
-function close(){lb.hidden=true}
-document.getElementById("lbX").onclick=close;document.getElementById("lbP").onclick=()=>{if(!lb.dataset.single)open(at-1)};document.getElementById("lbN").onclick=()=>{if(!lb.dataset.single)open(at+1)};
-lb.addEventListener("click",e=>{if(e.target===lb)close()});
-document.addEventListener("keydown",e=>{if(lb.hidden)return;if(e.key==="Escape")close();if(lb.dataset.single)return;if(e.key==="ArrowRight")open(at+1);if(e.key==="ArrowLeft")open(at-1)});
-})();
-
-/* ======================= THE DRONE · photo explorer ======================= */
-(function(){
-"use strict";
-const IW=1513,IH=1039;
-// x,y in photo pixels. visible:false = part not visible in the photo, so the view zooms to the body only.
-const PARTS=[
- {name:"Airframe",role:"Lightweight frame that carries every component and keeps the drone rigid in flight.",x:1120,y:575,z:2.4,visible:true},
- {name:"Motors & propellers",role:"Four motor-and-propeller units that create lift and steer the drone.",x:1188,y:642,z:2.6,visible:true},
- {name:"Battery",role:"Onboard power source for the motors, flight controller and sensors.",x:1075,y:470,z:1.7,visible:false},
- {name:"Flight controller",role:"Reads the motion sensors and constantly adjusts motor speeds to keep the drone stable.",x:1165,y:452,z:2.6,visible:true,inside:true},
- {name:"Camera / AI sensor",role:"Forward-facing camera whose video feeds the person-detection software.",x:956,y:505,z:2.8,visible:true},
- {name:"Distance (ToF) sensors",role:"Time-of-flight sensors that measure the distance to nearby walls and obstacles.",x:1075,y:470,z:1.7,visible:false},
- {name:"Optical-flow sensor",role:"Downward-facing sensor that tracks the floor so the drone can hold its position indoors.",x:1075,y:470,z:1.7,visible:false}
-];
-const pv=document.getElementById("pv"),pz=document.getElementById("pz"),chips=document.getElementById("chips");
-const $=id=>document.getElementById(id);
-let sel=-1,zoom=1,full=false;const OV={x:1068,y:448,z:1.5};
-const two=n=>String(n).padStart(2,"0");
-$("mCount").textContent=two(PARTS.length);
-const markers=[];
-PARTS.forEach((p,i)=>{
-  if(p.visible){const b=document.createElement("button");b.className="hs";b.style.left=(p.x/IW*100)+"%";b.style.top=(p.y/IH*100)+"%";
-    b.textContent=two(i+1);b.setAttribute("aria-label",p.name);b.setAttribute("aria-pressed","false");
-    b.addEventListener("click",e=>{e.stopPropagation();select(sel===i?-1:i)});pz.appendChild(b);markers[i]=b}
-  const c=document.createElement("button");c.className="chip";c.setAttribute("aria-pressed","false");
-  const n=document.createElement("span");n.className="n";n.textContent=two(i+1);const t=document.createElement("span");t.textContent=p.name;c.append(n,t);
-  c.addEventListener("click",()=>select(sel===i?-1:i));chips.appendChild(c)});
-function apply(){const r=pv.getBoundingClientRect(),W=r.width,H=r.height;
-  if(!W)return;if(sel<0&&full){zoom=1;pz.style.transform="translate(0px,0px) scale(1)";}
-  else{const p=sel<0?OV:PARTS[sel];zoom=p.z;const px=p.x/IW*W,py=p.y/IH*H;
-    let tx=W/2-px*zoom,ty=H/2-py*zoom;tx=Math.min(0,Math.max(W-W*zoom,tx));ty=Math.min(0,Math.max(H-H*zoom,ty));
-    pz.style.transform="translate("+tx.toFixed(1)+"px,"+ty.toFixed(1)+"px) scale("+zoom+")"}
-  pz.style.setProperty("--z",zoom);pv.classList.toggle("zoomed",sel>=0);$("bFull").textContent=(sel<0&&full)?"Focus on the drone":"Show full photo";$("zm").textContent=zoom.toFixed(1)+"×"}
-function select(i){sel=i;if(i>=0)full=false;
-  [...chips.children].forEach((c,k)=>c.setAttribute("aria-pressed",k===i?"true":"false"));
-  markers.forEach((m,k)=>m&&m.setAttribute("aria-pressed",k===i?"true":"false"));
-  const name=$("cName");
-  if(i<0){$("cIdx").textContent="Component";name.textContent="No part selected";name.classList.remove("on");$("cRole").textContent="Tap a numbered marker on the rendering to see what each part does.";$("cTag").textContent="";$("mSel").textContent="None";$("mSelDot").className="dot";$("zStamp").textContent="Tap a marker"}
-  else{const p=PARTS[i];$("cIdx").textContent="Component "+two(i+1)+" / "+two(PARTS.length);name.textContent=p.name;name.classList.add("on");$("cRole").textContent=p.role;
-    $("cTag").textContent=!p.visible?"Not shown in this rendering":p.inside?"Inside the body":"Marker "+two(i+1)+" on the rendering";
-    $("mSel").textContent="#"+two(i+1);$("mSelDot").className="dot cy";$("zStamp").textContent=p.name}
-  apply()}
-pv.addEventListener("click",()=>{if(sel>=0)select(-1)});
-$("bFull").addEventListener("click",()=>{full=!(sel<0&&full);select(-1)});
-window.addEventListener("resize",apply);
-window.PHOTO={refresh:apply,select};
-select(-1);
-})();
-
-/* ======================= LIVE DEMO ======================= */
-(function(){
-"use strict";
-const LIBS=["https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js","https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"];
-const $=id=>document.getElementById(id);
-const video=$("video"),ovl=$("ovl"),ctx=ovl.getContext("2d"),box=$("feedbox");
-const ovIntro=$("ovIntro"),ovBusy=$("ovBusy"),ovFail=$("ovFail");
-const S={stream:null,model:null,running:false,facing:"environment",mirror:false,tracks:[],nextId:1,fps:0,lastDet:0,loop:0,wake:null,modelState:"none",camLabel:"OFFLINE",multiCam:false};
-
-function overlay(which){box.classList.toggle("idle",which!==null&&!S.stream);if(which===null||S.stream)fit();ovIntro.hidden=which!=="intro";ovBusy.hidden=which!=="busy";ovFail.hidden=which!=="fail";
-  ["hudTL","hudTR","hudBL"].forEach(id=>$(id).hidden=which!==null)}
-function busy(t,p){$("busyT").textContent=t;$("busyP").textContent=p;overlay("busy")}
-const FAILS={
-  denied:["Camera permission denied","Camera access was blocked. Allow the camera for this page in your browser settings (tap the lock or camera icon in the address bar), then try again."],
-  nocam:["No camera found","This device has no available camera, or another app is using it. Close other camera apps and try again."],
-  insecure:["Camera needs a secure link","Browsers only open the camera on secure (https) pages. Open the demo through its https link."],
-  unsupported:["Camera not supported here","This browser or in-app viewer cannot open the camera. Open the link in Safari or Chrome."],
-  model:["Detection model didn't load","The demo downloads its detection model from the internet the first time. Check your connection and try again."],
-  framed:["Camera blocked in this view","This page is shown inside another app that doesn't allow camera access. Open the demo's own link in Safari or Chrome to use the live camera."],
-  other:["Camera unavailable","The camera could not be started. Try again, or open the link in Safari or Chrome."]};
-function fail(kind){stopStream();const f=FAILS[kind]||FAILS.other;$("failEye").textContent="Live demo · "+(kind==="model"?"Model offline":"Camera offline");$("failT").textContent=f[0];$("failP").textContent=f[1];overlay("fail");setCam("off");updateSys()}
-
-function setDot(id,cls){$(id).className="dot "+cls}
-function setModelState(s){S.modelState=s;const m={none:["","NOT LOADED"],loading:["warn blink","LOADING"],ready:["ok","COCO-SSD"],error:["warn","OFFLINE"]}[s];setDot("sAiD",m[0]);$("sAi").textContent=m[1];$("sAiL").textContent=s==="ready"?"AI active":s==="loading"?"AI loading":"AI standby"}
-function setCam(s){if(s==="live"){setDot("sCamD","ok");setDot("feedDot","ok");$("sCamL").textContent="Camera live";$("sCam").textContent=S.camLabel;$("feedTag").textContent="Camera feed live · "+S.camLabel}
-  else{setDot("sCamD","warn");setDot("feedDot","warn");$("sCamL").textContent="Camera offline";$("sCam").textContent="";$("feedTag").textContent="Camera feed offline"}}
-function updateSys(){if(current!=="demo"){setSys("cy","Ready");return}
-  if(S.running)setSys("ok","System online");else setSys("warn","Camera offline")}
-
-function loadScript(src){return new Promise((res,rej)=>{if([...document.scripts].some(s=>s.src===src))return res();const s=document.createElement("script");s.src=src;s.async=false;s.onload=res;s.onerror=()=>rej(new Error("load "+src));document.head.appendChild(s)})}
-let MODEL_P=null;
-function ensureModel(){if(S.model)return Promise.resolve(S.model);if(!MODEL_P)MODEL_P=loadModel().catch(e=>{MODEL_P=null;throw e});return MODEL_P}
-async function loadModel(){setModelState("loading");
-  try{for(const u of LIBS)await loadScript(u);
-    try{await tf.setBackend("webgl")}catch(_){}await tf.ready();
-    try{tf.enableProdMode()}catch(_){}
-    S.model=await cocoSsd.load({base:"lite_mobilenet_v2"});
-    try{const w=document.createElement("canvas");w.width=320;w.height=240;await S.model.detect(w);await S.model.detect(w)}catch(_){}
-    setModelState("ready");return S.model}
-  catch(e){console.error(e);setModelState("error");throw e}}
-
-async function openCam(){const c={audio:false,video:{facingMode:{ideal:S.facing},width:{ideal:640},height:{ideal:480},frameRate:{ideal:30}}};
-  const st=await navigator.mediaDevices.getUserMedia(c);S.stream=st;video.srcObject=st;
-  await new Promise(r=>{if(video.readyState>=1)r();else video.onloadedmetadata=()=>r()});await video.play().catch(()=>{});
-  const tr=st.getVideoTracks()[0],set=tr&&tr.getSettings?tr.getSettings():{};
-  const fm=set.facingMode||(S.facing==="user"?"user":"");S.mirror=fm==="user"||(!set.facingMode&&!/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent));
-  S.camLabel=fm==="environment"?"REAR":fm==="user"?"FRONT":"WEBCAM";video.classList.toggle("mirror",S.mirror);
-  try{const devs=await navigator.mediaDevices.enumerateDevices();S.multiCam=devs.filter(d=>d.kind==="videoinput").length>1}catch(_){S.multiCam=false}
-  $("bFlip").disabled=!S.multiCam;fit()}
-function stopStream(){S.running=false;cancelAnimationFrame(S.loop);if(S.stream){S.stream.getTracks().forEach(t=>t.stop());S.stream=null}video.srcObject=null;
-  S.tracks=[];$("bStop").disabled=true;$("bFlip").disabled=true;if(S.wake){S.wake.release().catch(()=>{});S.wake=null}clearCanvas();panel()}
-
-async function start(){
-  if(!window.isSecureContext)return fail("insecure");
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return fail("unsupported");
-  busy("Requesting camera","Allow camera access when your browser asks.");
-  try{await openCam()}catch(e){console.error(e);const n=e&&e.name;
-    let framed=false;try{framed=window.self!==window.top}catch(_){framed=true}
-    return fail((n==="NotAllowedError"||n==="SecurityError")&&framed?"framed":n==="NotAllowedError"||n==="SecurityError"?"denied":(n==="NotFoundError"||n==="OverconstrainedError"||n==="NotReadableError")?"nocam":"other")}
-  setCam("live");
-  if(!S.model){busy("Preparing detection model","Almost ready. This happens once; next time it opens instantly.");try{await ensureModel()}catch(e){return fail("model")}}
-  overlay(null);S.running=true;$("bStop").disabled=false;
-  try{if("wakeLock" in navigator)S.wake=await navigator.wakeLock.request("screen")}catch(_){}
-  S.lastDet=performance.now();detectLoop();drawLoop();updateSys()}
-function stop(){if(!S.stream&&!S.running)return;stopStream();setCam("off");overlay("intro");updateSys()}
-async function flip(){S.facing=S.facing==="environment"?"user":"environment";const was=S.running;stopStream();busy("Switching camera","");
-  try{await openCam();setCam("live");overlay(null);if(was||S.model){S.running=true;$("bStop").disabled=false;detectLoop();drawLoop()}}catch(e){fail("other")}updateSys()}
-
-function fit(){const vw=video.videoWidth||4,vh=video.videoHeight||3;if(!S.stream){box.style.aspectRatio="";box.style.width="";return}box.style.aspectRatio=vw+" / "+vh;
-  const maxH=window.innerHeight*(window.innerWidth<980?.62:.7),pw=box.parentElement.clientWidth;box.style.width=Math.min(pw,maxH*vw/vh)+"px";
-  const r=box.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);ovl.width=Math.round(r.width*d);ovl.height=Math.round(r.height*d)}
-window.addEventListener("resize",()=>{if(S.stream)fit()});
-
-function iou(a,b){const x1=Math.max(a[0],b[0]),y1=Math.max(a[1],b[1]),x2=Math.min(a[0]+a[2],b[0]+b[2]),y2=Math.min(a[1]+a[3],b[1]+b[3]);const i=Math.max(0,x2-x1)*Math.max(0,y2-y1);return i/(a[2]*a[3]+b[2]*b[3]-i||1)}
-function update(dets,now){const used=new Set();
-  for(const t of S.tracks){let best=-1,bv=.25;dets.forEach((d,k)=>{if(used.has(k))return;const v=iou(t.box,d.bbox);if(v>bv){bv=v;best=k}});
-    if(best>=0){used.add(best);t.box=dets[best].bbox.slice();t.score=dets[best].score;t.seen=now}}
-  dets.forEach((d,k)=>{if(!used.has(k))S.tracks.push({id:S.nextId++,box:d.bbox.slice(),disp:d.bbox.slice(),score:d.score,seen:now,born:now})});
-  S.tracks=S.tracks.filter(t=>now-t.seen<400);if(S.nextId>99)S.nextId=1}
-const dc=document.createElement("canvas"),dctx=dc.getContext("2d",{willReadFrequently:false});const DET_MAX=320;
-async function detectLoop(){if(!S.running)return;
-  if(video.readyState>=2&&!document.hidden){try{const vw=video.videoWidth,vh=video.videoHeight,k=Math.min(1,DET_MAX/Math.max(vw,vh)),dw=Math.round(vw*k),dh=Math.round(vh*k);
-      if(dc.width!==dw||dc.height!==dh){dc.width=dw;dc.height=dh}dctx.drawImage(video,0,0,dw,dh);
-      const p=await S.model.detect(dc,20,.45);const now=performance.now(),inv=1/k;
-      update(p.filter(x=>x.class==="person").map(x=>({score:x.score,bbox:x.bbox.map(v=>v*inv)})),now);const dt=(now-S.lastDet)/1000;S.lastDet=now;if(dt>0)S.fps=S.fps?S.fps*.85+(1/dt)*.15:1/dt;panel()}catch(e){console.error(e)}}
-  else await new Promise(r=>setTimeout(r,200));
-  if(S.running)requestAnimationFrame(()=>detectLoop())}
-function clearCanvas(){ctx.clearRect(0,0,ovl.width,ovl.height)}
-function primary(){let b=null;for(const t of S.tracks)if(!b||t.score>b.score)b=t;return b}
-function drawLoop(){if(!S.running)return;draw(performance.now());S.loop=requestAnimationFrame(drawLoop)}
-function draw(now){const W=ovl.width,H=ovl.height,sx=W/(video.videoWidth||W),sy=H/(video.videoHeight||H),d=W/Math.max(1,ovl.getBoundingClientRect().width);clearCanvas();
-  const P=primary();
-  for(const t of S.tracks){for(let i=0;i<4;i++)t.disp[i]+=(t.box[i]-t.disp[i])*.9;
-    let [x,y,w,h]=t.disp;x*=sx;y*=sy;w*=sx;h*=sy;if(S.mirror)x=W-x-w;
-    const age=Math.min(1,(now-t.born)/80),fade=Math.max(0,1-Math.max(0,now-t.seen-150)/250);ctx.globalAlpha=age*fade;
-    const isP=t===P,col="#2391EB";
-    ctx.strokeStyle=col;ctx.lineWidth=2*d;ctx.strokeRect(x,y,w,h);
-    const lab="PERSON "+Math.round(t.score*100)+"%";ctx.font="700 "+(15*d)+"px Rajdhani,Bahnschrift,'Arial Narrow',sans-serif";
-    const tw=ctx.measureText(lab).width,ph=24*d,pad=8*d;let ly=y-ph;if(ly<0)ly=y;
-    ctx.fillStyle=col;ctx.fillRect(x-1*d,ly,tw+pad*2,ph);ctx.fillStyle="#FFFFFF";ctx.textBaseline="middle";ctx.fillText(lab,x-1*d+pad,ly+ph/2+1*d);
-    if(isP){ctx.fillStyle="#FFFFFF";ctx.beginPath();ctx.arc(x+w/2,y+h/2,4*d,0,Math.PI*2);ctx.fill()}
-    ctx.globalAlpha=1}}
-function panel(){const n=S.tracks.length,P=primary();$("aCount").textContent=String(n).padStart(2,"0");$("tgt").textContent=String(n).padStart(2,"0");
-  $("fps").textContent=S.running&&S.fps?S.fps.toFixed(1):"--";const trk=$("trk");trk.textContent=n?"● TARGET ACQUIRED":"○ SCANNING";
-  if(P){setDot("aTDot","ok");$("aT").textContent="Acquired";
-    const vw=video.videoWidth||1,vh=video.videoHeight||1;let cx=(P.box[0]+P.box[2]/2)/vw,cy=(P.box[1]+P.box[3]/2)/vh;if(S.mirror)cx=1-cx;
-    const hx=cx<.4?"Left":cx>.6?"Right":"Center",dx=Math.round((cx-.5)*200),dy=Math.round((.5-cy)*200),sg=v=>(v>=0?"+":"")+v;
-    $("aPos").textContent=hx;$("aPos").classList.add("on");$("aPosS").textContent="";
-    $("aConf").textContent=Math.round(P.score*100)+"%";$("aBar").style.width=Math.round(P.score*100)+"%"}
-  else{setDot("aTDot","");$("aT").textContent="None";$("aPos").textContent="No person";$("aPos").classList.remove("on");$("aPosS").textContent="";$("aConf").textContent="--";$("aBar").style.width="0"}
-  updateSys()}
-
-$("bStart").onclick=start;$("bRetry").onclick=start;$("bStop").onclick=stop;$("bFlip").onclick=flip;
-document.addEventListener("visibilitychange",async()=>{if(!document.hidden&&S.running&&!S.wake&&"wakeLock" in navigator){try{S.wake=await navigator.wakeLock.request("screen")}catch(_){}}});
-setModelState("none");setCam("off");overlay("intro");
-window.DEMO={stop,updateSys,S,panel,draw,fit,overlay,setCam,setModelState};
-
-
-/* network-only prefetch: warms the browser cache, no parsing or GPU work while the visitor scrolls */
-function prefetch(){
-  const MJ="https://storage.googleapis.com/tfjs-models/savedmodel/ssdlite_mobilenet_v2/model.json";
-  const get=u=>fetch(u,{mode:"cors",credentials:"omit",priority:"low"}).catch(()=>null);
-  LIBS.forEach(get);
-  get(MJ).then(r=>r&&r.ok?r.json():null).then(j=>{if(!j||!j.weightsManifest)return;const base=MJ.slice(0,MJ.lastIndexOf("/")+1);
-    j.weightsManifest.forEach(g=>(g.paths||[]).forEach(p=>get(base+p)))}).catch(()=>{});
-}
-/* silent background preload: when the visitor nears the demo, or a few seconds after the site opens */
-(function(){
-  const c=navigator.connection;if(c&&(c.saveData||/(^|-)2g$/.test(c.effectiveType||"")))return;
-  let go=false;const kick=()=>{if(go||S.model)return;go=true;prefetch()};
-  const demo=document.getElementById("demo");
-  if(demo&&"IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();kick()}},{rootMargin:"900px 0px"});io.observe(demo)}
-  const idle=window.requestIdleCallback||(f=>setTimeout(f,1));
-})();
-})();
-
-
-
-/* ======================= MISSION PHOTO (share card) ======================= */
-(function(){
-"use strict";
-const $=id=>document.getElementById(id);
-const video=$("video"),bShot=$("bShot"),bShot2=$("bShot2"),cd=$("cdown"),flash=$("flash");
-const modal=$("shotModal"),shotImg=$("shotImg"),bShare=$("bShare"),bSave=$("bSave"),bRetake=$("bRetake");
-const SITE="silentspearteam-oss.github.io/kr8-063-nanodrone";
-const load=src=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src});
-let LOGOS=null;async function logos(){if(!LOGOS)LOGOS=await Promise.all([load("img/ss-lock-w.png"),load("img/hct-w.png"),load("img/kre8-w.png")]);return LOGOS}
-let busy=false,lastBlob=null,lastURL=null;
-setInterval(()=>{const S=window.DEMO&&DEMO.S;const on=!!(S&&S.running&&$("ovIntro").hidden&&$("ovBusy").hidden&&$("ovFail").hidden);bShot.hidden=!on||busy;bShot2.disabled=!on||busy},300);
-function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
-async function countdown(){cd.hidden=false;for(const n of [3,2,1]){cd.textContent=n;cd.classList.remove("tick");void cd.offsetWidth;cd.classList.add("tick");await sleep(900)}cd.hidden=true}
-function spaced(ctx,txt,x,y,ls,align){try{ctx.letterSpacing=ls+"px"}catch(_){}ctx.textAlign=align||"center";ctx.fillText(txt,x,y);try{ctx.letterSpacing="0px"}catch(_){}}
-async function compose(){
-  const S=DEMO.S,W=1080,H=1920,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
-  try{await document.fonts.ready}catch(_){}
-  const [ss,hct,k8]=await logos();
-  // background
-  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#0B1626");g.addColorStop(.5,"#070B12");g.addColorStop(1,"#0B1626");x.fillStyle=g;x.fillRect(0,0,W,H);
-  x.strokeStyle="rgba(35,145,235,.07)";x.lineWidth=1;for(let i=0;i<W;i+=40){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke()}for(let j=0;j<H;j+=40){x.beginPath();x.moveTo(0,j);x.lineTo(W,j);x.stroke()}
-  // header
-  if(ss){const h=124,w=h*ss.width/ss.height;x.drawImage(ss,(W-w)/2,48,w,h)}
-  x.fillStyle="#00BCEB";x.font="500 24px 'Roboto Mono',monospace";spaced(x,"LIVE DEMO · DETECTION CONCEPT",W/2,226,5);
-  // photo area
-  const R={x:60,y:258,w:960,h:1240};
-  x.fillStyle="#000";x.fillRect(R.x,R.y,R.w,R.h);
-  const vw=video.videoWidth||4,vh=video.videoHeight||3,kk=Math.max(R.w/vw,R.h/vh),ox=(vw*kk-R.w)/2,oy=(vh*kk-R.h)/2;
-  x.save();x.beginPath();x.rect(R.x,R.y,R.w,R.h);x.clip();
-  if(window.CAM_MONO){try{x.filter="grayscale(1) contrast(1.12)"}catch(_){}}
-  if(S.mirror){x.translate(R.x+R.w,0);x.scale(-1,1);x.drawImage(video,-ox,R.y-oy,vw*kk,vh*kk)}else x.drawImage(video,R.x-ox,R.y-oy,vw*kk,vh*kk);
-  x.restore();try{x.filter="none"}catch(_){}
-  // soft vignette
-  const vg=x.createRadialGradient(W/2,R.y+R.h/2,R.h*.35,W/2,R.y+R.h/2,R.h*.8);vg.addColorStop(0,"rgba(0,0,0,0)");vg.addColorStop(1,"rgba(0,0,0,.45)");x.fillStyle=vg;x.fillRect(R.x,R.y,R.w,R.h);
-  // detection boxes
-  let best=null;for(const t of S.tracks)if(!best||t.score>best.score)best=t;
-  x.save();x.beginPath();x.rect(R.x,R.y,R.w,R.h);x.clip();
-  for(const t of S.tracks){const b=t.disp||t.box;let bx=b[0]*kk-ox,by=b[1]*kk-oy,bw=b[2]*kk,bh=b[3]*kk;if(S.mirror)bx=R.w-bx-bw;bx+=R.x;by+=R.y;
-    x.strokeStyle="#2391EB";x.lineWidth=5;x.strokeRect(bx,by,bw,bh);
-    const lab="PERSON "+Math.round(t.score*100)+"%";x.font="700 34px Rajdhani,Bahnschrift,'Arial Narrow',sans-serif";const tw=x.measureText(lab).width;
-    let ly=by-50;if(ly<R.y)ly=by;x.fillStyle="#2391EB";x.fillRect(bx-2.5,ly,tw+32,50);x.fillStyle="#fff";x.textAlign="left";x.textBaseline="middle";x.fillText(lab,bx+14,ly+27);x.textBaseline="alphabetic";
-    if(t===best){x.fillStyle="#fff";x.beginPath();x.arc(bx+bw/2,by+bh/2,8,0,6.283);x.fill()}}
-  x.restore();
-  // HUD frame
-  x.strokeStyle="rgba(48,66,89,1)";x.lineWidth=2;x.strokeRect(R.x,R.y,R.w,R.h);
-  x.strokeStyle="#00BCEB";x.lineWidth=5;const L=46,m=18;
-  [[R.x+m,R.y+m,1,1],[R.x+R.w-m,R.y+m,-1,1],[R.x+m,R.y+R.h-m,1,-1],[R.x+R.w-m,R.y+R.h-m,-1,-1]].forEach(([px,py,ux,uy])=>{x.beginPath();x.moveTo(px+ux*L,py);x.lineTo(px,py);x.lineTo(px,py+uy*L);x.stroke()});
-  const n=S.tracks.length,now=new Date(),dd=String(now.getDate()).padStart(2,"0")+"."+String(now.getMonth()+1).padStart(2,"0")+"."+now.getFullYear();
-  x.fillStyle="rgba(0,0,0,.72)";x.fillRect(R.x+42,R.y+42,n?380:300,58);x.fillStyle="#00BCEB";x.fillRect(R.x+42,R.y+42,6,58);
-  x.fillStyle="#fff";x.font="700 32px Rajdhani,Bahnschrift,sans-serif";x.textAlign="left";x.fillText(n?"● TARGET ACQUIRED":"○ SCANNING",R.x+64,R.y+82);
-  x.fillStyle="rgba(0,0,0,.72)";x.fillRect(R.x+R.w-262,R.y+42,220,72);x.font="500 24px 'Roboto Mono',monospace";x.fillStyle="#E6EDF5";x.textAlign="right";x.fillText("PERSONS "+String(n).padStart(2,"0"),R.x+R.w-46,R.y+70);x.fillStyle="#AAB8C5";x.fillText(dd,R.x+R.w-46,R.y+102);
-  // title block
-  x.textAlign="center";x.font="700 96px Rajdhani,Bahnschrift,sans-serif";
-  const t1="KR8.063 ",t2="Nanodrone",w1=x.measureText(t1).width,w2=x.measureText(t2).width,sx=(W-w1-w2)/2;
-  x.textAlign="left";x.fillStyle="#fff";x.fillText(t1,sx,1606);x.fillStyle="#00BCEB";x.shadowColor="rgba(0,188,235,.6)";x.shadowBlur=24;x.fillText(t2,sx+w1,1606);x.shadowBlur=0;
-  x.fillStyle="#AAB8C5";x.font="600 27px Rajdhani,Bahnschrift,sans-serif";spaced(x,"INTELLIGENT INDOOR RECONNAISSANCE PLATFORM",W/2,1656,5);
-  x.font="700 29px Rajdhani,Bahnschrift,sans-serif";const m1="SO THAT HUMANS ARE ",m2="NEVER",m3=" THE FIRST TO ENTER.";
-  try{x.letterSpacing="4px"}catch(_){}const a1=x.measureText(m1).width,a2=x.measureText(m2).width,a3=x.measureText(m3).width;let mx=(W-a1-a2-a3)/2;x.textAlign="left";
-  x.fillStyle="#E6EDF5";x.fillText(m1,mx,1712);x.fillStyle="#00BCEB";x.fillText(m2,mx+a1,1712);x.fillStyle="#E6EDF5";x.fillText(m3,mx+a1+a2,1712);try{x.letterSpacing="0px"}catch(_){}
-  // partner logos + url
-  x.fillStyle="rgba(170,184,197,.25)";x.fillRect(120,1752,W-240,2);
-  const lh=58;let parts=[];if(hct)parts.push([hct,hct.width*lh/hct.height]);if(k8)parts.push([k8,k8.width*lh/k8.height]);
-  const gap=70,tot=parts.reduce((a,p)=>a+p[1],0)+gap*(parts.length-1);let px=(W-tot)/2;
-  parts.forEach(([im,w],i)=>{x.drawImage(im,px,1784,w,lh);px+=w;if(i<parts.length-1){x.fillStyle="rgba(170,184,197,.4)";x.fillRect(px+gap/2-1,1788,2,50);px+=gap}});
-  x.fillStyle="#7C8898";x.font="500 22px 'Roboto Mono',monospace";spaced(x,SITE,W/2,1885,1);
-  return await new Promise(r=>c.toBlob(r,"image/jpeg",.9));
-}
-async function shoot(){if(busy)return;busy=true;bShot.hidden=true;
-  try{await countdown();flash.classList.remove("go");void flash.offsetWidth;flash.classList.add("go");
-    const blob=await compose();if(!blob)throw new Error("no image");
-    lastBlob=blob;if(lastURL)URL.revokeObjectURL(lastURL);lastURL=URL.createObjectURL(blob);shotImg.src=lastURL;bSave.href=lastURL;
-    const file=new File([blob],"KR8063-mission-photo.jpg",{type:"image/jpeg"});
-    bShare.hidden=!(navigator.canShare&&navigator.canShare({files:[file]}));
-    $("shotTip").textContent=bShare.hidden?"Save the photo, then post it to your story and tag Silent Spear Team. On iPhone you can also press and hold the photo to save it.":"Tap Share to story, then pick Instagram or Snapchat. Tag Silent Spear Team.";
-    modal.hidden=false;bShare.hidden?bSave.focus():bShare.focus()}
-  catch(e){console.error(e)}finally{busy=false;cd.hidden=true}}
-(function(){const bc=$("mColor"),bm=$("mMono");function set(m){window.CAM_MONO=m;video.classList.toggle("mono",m);bc.setAttribute("aria-pressed",!m);bm.setAttribute("aria-pressed",m);try{localStorage.setItem("kr8mono",m?"1":"0")}catch(_){}}
-  bc.onclick=()=>set(false);bm.onclick=()=>set(true);let s=false;try{s=localStorage.getItem("kr8mono")==="1"}catch(_){}set(s)})();
-bShot.addEventListener("click",shoot);bShot2.addEventListener("click",shoot);
-bShare.addEventListener("click",async()=>{if(!lastBlob)return;const file=new File([lastBlob],"KR8063-mission-photo.jpg",{type:"image/jpeg"});
-  try{await navigator.share({files:[file],title:"KR8.063 Nanodrone",text:"Spotted by the KR8.063 Nanodrone detection demo · Silent Spear Team #KR8063Nanodrone #SilentSpearTeam https://"+SITE})}catch(_){}});
-bRetake.addEventListener("click",()=>{modal.hidden=true});
-modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!modal.hidden)modal.hidden=true});
-window.SHOT={compose};
-})();
-FILM.mount();
-
-</script>
-
-</body>
-</html>
+  document.getElementById("lbC").textContent=(z.closest("figure")?.querySelector("figcaption b")
